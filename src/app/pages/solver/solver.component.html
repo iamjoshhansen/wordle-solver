@@ -1,0 +1,16 @@
+<h1>Wordle Solver</h1>
+
+<section class="words">
+  <app-word *ngFor="let word of puzzle.words$ | async" [word]="word"></app-word>
+</section>
+
+<h2 class="answers-header">Answers</h2>
+<ul class="answers">
+  <li
+    *ngFor="let answer of puzzle.answers$ | async"
+    class="answers__item"
+    (click)="addWord(answer)"
+  >
+    {{ answer }}
+  </li>
+</ul>

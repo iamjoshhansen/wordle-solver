@@ -1,0 +1,9 @@
+<span
+  (click)="nextMode()"
+  class="letter"
+  [class.letter--excluded]="(letter.mode$ | async) == LetterMode.excluded"
+  [class.letter--missplaced]="(letter.mode$ | async) == LetterMode.missplaced"
+  [class.letter--found]="(letter.mode$ | async) == LetterMode.found"
+>
+  {{ letter.letter$ | async }}
+</span>

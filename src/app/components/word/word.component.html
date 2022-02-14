@@ -1,0 +1,4 @@
+<app-letter
+  *ngFor="let letter of word.letters$ | async; let i = index"
+  [letter]="letter"
+></app-letter>
