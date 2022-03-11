@@ -106,7 +106,10 @@ export class Puzzle {
       throw new Error(`Cannot add non 5-letter words`);
     }
     const newWord = new Word(
-      word.split('').map((c) => new Letter(c)) as Letters
+      word
+        .toUpperCase()
+        .split('')
+        .map((c) => new Letter(c)) as Letters
     );
 
     const words = this.words!;

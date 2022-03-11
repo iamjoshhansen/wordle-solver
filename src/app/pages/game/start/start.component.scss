@@ -1,0 +1,38 @@
+.form {
+  display: block;
+  max-width: 21.5rem;
+  margin: 0 auto;
+}
+
+.input {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 0.125em 0.75ch;
+  font-size: 2.5em;
+  font-family: var(--font-headings);
+  // letter-spacing: 0.5em;
+  text-align: center;
+  display: block;
+  margin: 0.25em 0;
+
+  &::placeholder {
+    color: var(--placeholder);
+  }
+}
+
+.submit {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 0.125em 0.75ch;
+  border: none;
+  background: var(--link-color);
+  color: var(--text-invert);
+  font-size: 2em;
+  cursor: pointer;
+
+  &:disabled {
+    opacity: 0.5;
+    filter: grayscale(0.5);
+    cursor: not-allowed;
+  }
+}

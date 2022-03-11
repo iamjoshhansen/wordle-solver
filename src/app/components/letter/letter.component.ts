@@ -17,7 +17,19 @@ export class LetterComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  nextMode() {
+  isTouch = false;
+
+  nextMode(ev: Event, isTouch = false) {
+    ev.preventDefault();
+
+    if (isTouch) {
+      this.isTouch = true;
+    }
+
+    if (this.isTouch !== isTouch) {
+      return;
+    }
+
     const modes: LetterMode[] = [
       LetterMode.excluded,
       LetterMode.missplaced,

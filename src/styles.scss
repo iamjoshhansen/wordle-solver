@@ -9,6 +9,7 @@ body,
   --font-headings: "Chakra Petch", sans-serif;
   --font: "Open Sans", sans-serif;
   --text-color: #333;
+  --placeholder: #00000033;
   --bg-color: #eee;
   --bg-hover: #ddd;
   --link-color: #09f;
@@ -24,8 +25,17 @@ body {
   color: var(--text-color);
 }
 
+input,
+textarea,
+button,
+select {
+  font-family: inherit;
+  color: inherit;
+}
+
 .theme--dark {
   --text-color: #eee;
+  --placeholder: #ffffff33;
   --bg-color: #101010;
   --link-color: #090;
   --bg-hover: #333;

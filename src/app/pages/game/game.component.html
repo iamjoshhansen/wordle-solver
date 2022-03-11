@@ -1,0 +1,12 @@
+<h1>Wordle Solver</h1>
+
+<app-start
+  *ngIf="!(hasStartingWord$ | async)"
+  (claim)="startWithWord($event)"
+></app-start>
+<app-solver
+  *ngIf="hasStartingWord$ | async"
+  [startingWord]="startingWord$ | async"
+  (reset)="reset()"
+  >Has starting word</app-solver
+>

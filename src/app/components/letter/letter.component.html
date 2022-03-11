@@ -1,5 +1,6 @@
 <span
-  (click)="nextMode()"
+  (touchstart)="nextMode($event, true)"
+  (mousedown)="nextMode($event)"
   class="letter"
   [class.letter--excluded]="(letter.mode$ | async) == LetterMode.excluded"
   [class.letter--missplaced]="(letter.mode$ | async) == LetterMode.missplaced"

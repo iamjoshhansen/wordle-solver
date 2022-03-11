@@ -1,15 +1,15 @@
 .letter {
   display: inline-block;
-  width: 0.5em;
-  height: 0.5em;
-  line-height: 0.5em;
+  width: 1ch;
+  height: 1ch;
+  line-height: 1ch;
   text-align: center;
-  padding: 1ch;
+  padding: 0.75ch;
   border: solid 1px #ccc;
   background: #fff;
   color: #333;
   font-weight: 700;
-  font-size: 2.25em;
+  font-size: 2.5em;
   font-family: var(--font-headings);
 
   &--excluded {

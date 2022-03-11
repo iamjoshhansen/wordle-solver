@@ -1,0 +1,21 @@
+<form class="form" (submit)="claimStartingWord()">
+  <input
+    class="input"
+    type="text"
+    maxlength="5"
+    name="word"
+    [value]="word$ | async"
+    (input)="setInput($event)"
+    autocomplete="off"
+    autocapitalize="characters"
+    autofocus="true"
+    placeholder="START"
+  />
+  <button
+    type="submit"
+    class="submit"
+    [disabled]="!(hasEnteredValidWord$ | async)"
+  >
+    Begin
+  </button>
+</form>
