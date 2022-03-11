@@ -9,7 +9,9 @@
 </section>
 
 <section *ngIf="!(needTaps$ | async) && !(hasBeenSolved$ | async)">
-  <h2 class="answers-header">Possible answers</h2>
+  <h2 class="answers-header">
+    Possible answers: {{ puzzle.answers$ | async | count | number }}
+  </h2>
   <ul class="answers" [class.answers--single]="hasSingleAnswer$ | async">
     <li
       *ngFor="let answer of puzzle.answers$ | async"

@@ -9,6 +9,7 @@ import { WordComponent } from './components/word/word.component';
 import { GameComponent } from './pages/game/game.component';
 import { SolverComponent } from './pages/game/solver/solver.component';
 import { StartComponent } from './pages/game/start/start.component';
+import { CountPipe } from './pipes/count.pipe';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { StartComponent } from './pages/game/start/start.component';
     SolverComponent,
     StartComponent,
     WordComponent,
+    CountPipe,
   ],
   imports: [BrowserModule, AppRoutingModule, FormsModule],
   providers: [],
