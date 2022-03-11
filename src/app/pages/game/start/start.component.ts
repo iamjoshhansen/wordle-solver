@@ -1,6 +1,9 @@
 import { Component, Output } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { distinctUntilChanged, map } from 'rxjs/operators';
+import { answers } from 'src/app/services/answers';
+
+const lastStartingWordKey = 'last-starting-word';
 
 @Component({
   selector: 'app-start',
@@ -17,7 +20,23 @@ export class StartComponent {
     return this.wordSubject.value;
   }
   set word(val: string) {
-    this.wordSubject.next(val);
+    this.wordSubject.next(val.toUpperCase());
+  }
+
+  isNotAPossibleAnswer$ = this.word$.pipe(
+    map((word) => {
+      if (word.length !== 5) {
+        return false;
+      }
+      return !answers.includes(word.toLowerCase());
+    })
+  );
+
+  get lastStartingWord() {
+    return window.localStorage.getItem(lastStartingWordKey) || '';
+  }
+  set lastStartingWord(word: string) {
+    window.localStorage.setItem(lastStartingWordKey, word.toUpperCase());
   }
 
   public readonly hasEnteredValidWord$ = this.word$.pipe(
@@ -30,7 +49,8 @@ export class StartComponent {
     this.word = event.target?.value || '';
   }
 
-  claimStartingWord() {
-    this.claim.next(this.word);
+  claimStartingWord(word = this.word) {
+    this.claim.next(word);
+    this.lastStartingWord = word;
   }
 }

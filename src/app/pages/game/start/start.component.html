@@ -9,8 +9,9 @@
     autocomplete="off"
     autocapitalize="characters"
     autofocus="true"
-    placeholder="START"
+    placeholder="STARTING WORD"
   />
+
   <button
     type="submit"
     class="submit"
@@ -18,4 +19,18 @@
   >
     Begin
   </button>
+
+  <section class="warning" *ngIf="isNotAPossibleAnswer$ | async">
+    ⚠️ "{{ word$ | async }}" is not a possible answer
+  </section>
 </form>
+
+<section *ngIf="!!lastStartingWord" class="last-starting-word-section">
+  last used starting word
+  <button
+    class="last-starting-word"
+    (click)="claimStartingWord(lastStartingWord)"
+  >
+    {{ lastStartingWord }}
+  </button>
+</section>
