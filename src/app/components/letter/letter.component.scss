@@ -5,28 +5,29 @@
   line-height: 1ch;
   text-align: center;
   padding: 0.75ch;
-  border: solid 1px #ccc;
-  background: #fff;
-  color: #333;
+  border: solid 1px var(--letter-border);
+  background: var(--letter-unset);
+  color: var(--text-color);
   font-weight: 700;
   font-size: 2.5em;
   font-family: var(--font-headings);
 
-  &--excluded {
-    color: #ccc;
-    background-color: #333;
+  &--excluded,
+  &--missplaced,
+  &--found {
+    color: var(--letter-active-text-color);
     border-color: transparent;
+  }
+
+  &--excluded {
+    background-color: var(--letter-excluded);
   }
 
   &--missplaced {
-    // color: #ccc;
-    background-color: rgb(213, 255, 73);
-    border-color: #00000022;
+    background-color: var(--letter-missplaced);
   }
 
   &--found {
-    color: #fff;
-    background-color: rgb(51, 197, 51);
-    border-color: transparent;
+    background-color: var(--letter-found);
   }
 }

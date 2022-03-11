@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { distinctUntilChanged, map } from 'rxjs/operators';
+import { ThemeService } from 'src/app/services/theme.service';
 
 @Component({
   selector: 'app-game',
@@ -16,7 +17,7 @@ export class GameComponent implements OnInit {
     map((word) => word.length > 0)
   );
 
-  constructor() {}
+  constructor(private themeService: ThemeService) {}
 
   ngOnInit(): void {}
 
@@ -26,5 +27,9 @@ export class GameComponent implements OnInit {
 
   reset() {
     this.startingWordSubject.next('');
+  }
+
+  toggleTheme() {
+    this.themeService.toggle();
   }
 }

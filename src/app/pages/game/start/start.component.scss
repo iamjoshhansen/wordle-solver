@@ -10,13 +10,21 @@
   padding: 0.125em 0.75ch;
   font-size: 2.5em;
   font-family: var(--font-headings);
-  // letter-spacing: 0.5em;
   text-align: center;
   display: block;
   margin: 0.25em 0;
+  border: solid 1px var(--letter-border);
+  color: var(--text-color);
+  background: var(--bg-color);
+  border-radius: 5px;
 
   &::placeholder {
     color: var(--placeholder);
+  }
+
+  &:focus {
+    outline: none;
+    border-color: var(--text-color);
   }
 }
 
@@ -25,8 +33,8 @@
   width: 100%;
   padding: 0.125em 0.75ch;
   border: none;
-  background: var(--link-color);
-  color: var(--text-invert);
+  background: var(--submit-bg);
+  color: var(--submit-color);
   font-size: 2em;
   cursor: pointer;
 

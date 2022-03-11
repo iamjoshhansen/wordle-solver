@@ -9,12 +9,23 @@ body,
   --font-headings: "Chakra Petch", sans-serif;
   --font: "Open Sans", sans-serif;
   --text-color: #333;
+  --helper-text-color: #777;
   --placeholder: #00000033;
   --bg-color: #eee;
   --bg-hover: #ddd;
   --link-color: #09f;
   --text-invert: #eee;
   --bg-invert: #333;
+
+  --submit-bg: #09f;
+  --submit-color: #fff;
+
+  --letter-border: #c9ccd1;
+  --letter-unset: #ffffff00;
+  --letter-excluded: #65696a;
+  --letter-missplaced: #bca746;
+  --letter-found: #599d52;
+  --letter-active-text-color: var(--text-invert);
 }
 
 body {
@@ -35,12 +46,23 @@ select {
 
 .theme--dark {
   --text-color: #eee;
-  --placeholder: #ffffff33;
+  --helper-text-color: #ccc;
+  --placeholder: #ffffff66;
   --bg-color: #101010;
   --link-color: #090;
   --bg-hover: #333;
   --text-invert: #333;
   --bg-invert: #eee;
+
+  --submit-bg: #090;
+  --submit-color: #fff;
+
+  --letter-border: #2c2c2d;
+  --letter-unset: #00000000;
+  --letter-excluded: #2c2c2d;
+  --letter-missplaced: #a6902e;
+  --letter-found: #437d3e;
+  --letter-active-text-color: var(--text-color);
 }
 
 a {

@@ -1,4 +1,4 @@
-<h1>Wordle Solver</h1>
+<h1 (click)="reset()">Wordle Solver</h1>
 
 <app-start
   *ngIf="!(hasStartingWord$ | async)"
@@ -10,3 +10,5 @@
   (reset)="reset()"
   >Has starting word</app-solver
 >
+
+<button (click)="toggleTheme()" class="theme-switcher"></button>

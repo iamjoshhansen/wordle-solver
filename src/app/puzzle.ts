@@ -174,7 +174,7 @@ export class Word {
 }
 
 export enum LetterMode {
-  normal = 'normal',
+  unset = 'unset',
   excluded = 'excluded',
   missplaced = 'missplaced',
   found = 'found',
@@ -205,7 +205,7 @@ export class Letter {
     return this.modeSubject.value;
   }
 
-  constructor(letter = '', mode = LetterMode.normal) {
+  constructor(letter = '', mode = LetterMode.unset) {
     this.letter = letter;
     this.mode = mode;
   }

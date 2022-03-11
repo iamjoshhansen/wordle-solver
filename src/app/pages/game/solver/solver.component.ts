@@ -24,6 +24,16 @@ export class SolverComponent implements OnInit, OnDestroy {
     }
   }
 
+  needTaps$ = this.puzzle.words$.pipe(
+    map((words) => {
+      return (
+        words[words.length - 1].letters
+          ?.map((letter) => letter.mode)
+          .some((mode) => mode === LetterMode.unset) ?? true
+      );
+    })
+  );
+
   hasSingleAnswer$ = this.puzzle.answers$.pipe(
     map((answers) => answers.length === 1),
     distinctUntilChanged()

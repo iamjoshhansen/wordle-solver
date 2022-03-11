@@ -50,7 +50,9 @@ export class StartComponent {
   }
 
   claimStartingWord(word = this.word) {
-    this.claim.next(word);
-    this.lastStartingWord = word;
+    if (word.length === 5) {
+      this.claim.next(word);
+      this.lastStartingWord = word;
+    }
   }
 }
