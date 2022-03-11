@@ -2,6 +2,88 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map } from 'rxjs/operators';
 import { answers } from './services/answers';
 
+function getPossibleAnswers(words: Word[]): string[] {
+  const knownPattern: string = words
+    .reduce((acc, curr) => {
+      return curr
+        .letters!.map((letter, i) => {
+          const a = acc[i];
+          if (letter.mode === LetterMode.found || a !== '_') {
+            return letter.letter;
+          }
+          return '_';
+        })
+        .join('');
+    }, '_____')
+    .toLowerCase();
+
+  const knownPatternRegex = new RegExp(`^${knownPattern.replace(/_/g, '.')}$`);
+
+  // Bad Letters
+  const badLetterSet = new Set<string>();
+  words.forEach((word) =>
+    word.letters
+      ?.filter((letter) => letter.mode === LetterMode.excluded)
+      .forEach((letter) => badLetterSet.add(letter.letter!.toLowerCase()))
+  );
+  const badLetters = [...badLetterSet].join('');
+  const badLettersRegex = new RegExp(`^.*[${badLetters}].*$`);
+
+  const misplacedPatterns: string[] = words
+    .map((word) => {
+      return (
+        word.letters
+          ?.map((letter) =>
+            letter.mode === LetterMode.missplaced
+              ? letter.letter?.toLowerCase()
+              : '_'
+          )
+          .join('') ?? '_____'
+      );
+    })
+    .filter((x) => x !== '_____');
+
+  const missplacedLetters = [0, 1, 2, 3, 4].map((index) => [
+    ...new Set(
+      misplacedPatterns
+        .map((pattern) => pattern.charAt(index))
+        .filter((c) => c !== '_')
+    ),
+  ]);
+
+  const missingLetters = [
+    ...new Set(
+      misplacedPatterns
+        .join('')
+        .split('')
+        .filter((c) => c != '_')
+    ),
+  ];
+
+  return (
+    answers
+      // matches known spots
+      .filter((word) => !!word.match(knownPatternRegex))
+      // avoids bad letters
+      .filter((word) => !word.match(badLettersRegex))
+      // avoids bad spots
+      .filter((word) =>
+        missplacedLetters.every(
+          (letters, i) => !letters.includes(word.charAt(i))
+        )
+      )
+      // has all missing letters
+      .filter((word) => {
+        const has =
+          [...new Set(word.split(''))]
+            .map((c) => missingLetters.includes(c))
+            .reduce((a, c) => a + (c ? 1 : 0), 0) === missingLetters.length;
+        return has;
+      })
+      .map((word) => word.toUpperCase())
+  );
+}
+
 export class Puzzle {
   private wordsSubject = new BehaviorSubject<Word[] | null>([]);
   readonly words$ = this.wordsSubject.pipe(
@@ -15,91 +97,14 @@ export class Puzzle {
     return this.wordsSubject.value;
   }
 
-  answers$ = this.words$.pipe(
-    map((words) => {
-      const knownPattern: string = words
-        .reduce((acc, curr) => {
-          return curr
-            .letters!.map((letter, i) => {
-              const a = acc[i];
-              if (letter.mode === LetterMode.found || a !== '_') {
-                return letter.letter;
-              }
-              return '_';
-            })
-            .join('');
-        }, '_____')
-        .toLowerCase();
+  answers$ = this.words$.pipe(map((words) => getPossibleAnswers(words)));
 
-      const knownPatternRegex = new RegExp(
-        `^${knownPattern.replace(/_/g, '.')}$`
-      );
-
-      // Bad Letters
-      const badLetterSet = new Set<string>();
-      words.forEach((word) =>
-        word.letters
-          ?.filter((letter) => letter.mode === LetterMode.excluded)
-          .forEach((letter) => badLetterSet.add(letter.letter!.toLowerCase()))
-      );
-      const badLetters = [...badLetterSet].join('');
-      const badLettersRegex = new RegExp(`^.*[${badLetters}].*$`);
-
-      const misplacedPatterns: string[] = words
-        .map((word) => {
-          return (
-            word.letters
-              ?.map((letter) =>
-                letter.mode === LetterMode.missplaced
-                  ? letter.letter?.toLowerCase()
-                  : '_'
-              )
-              .join('') ?? '_____'
-          );
-        })
-        .filter((x) => x !== '_____');
-
-      const missplacedLetters = [0, 1, 2, 3, 4].map((index) => [
-        ...new Set(
-          misplacedPatterns
-            .map((pattern) => pattern.charAt(index))
-            .filter((c) => c !== '_')
-        ),
-      ]);
-
-      const missingLetters = [
-        ...new Set(
-          misplacedPatterns
-            .join('')
-            .split('')
-            .filter((c) => c != '_')
-        ),
-      ];
-
-      return (
-        answers
-          // matches known spots
-          .filter((word) => !!word.match(knownPatternRegex))
-          // avoids bad letters
-          .filter((word) => !word.match(badLettersRegex))
-          // avoids bad spots
-          .filter((word) =>
-            missplacedLetters.every(
-              (letters, i) => !letters.includes(word.charAt(i))
-            )
-          )
-          // has all missing letters
-          .filter((word) => {
-            const has =
-              [...new Set(word.split(''))]
-                .map((c) => missingLetters.includes(c))
-                .reduce((a, c) => a + (c ? 1 : 0), 0) === missingLetters.length;
-            return has;
-          })
-          .map((word) => word.toUpperCase())
-      );
-    })
-  );
+  getPossibleAnswers(): string[] {
+    if (!this.words) {
+      return [];
+    }
+    return getPossibleAnswers(this.words);
+  }
 
   addWord(word: string) {
     if (word.length !== 5) {
@@ -128,6 +133,10 @@ export class Puzzle {
 
     this.words = this.words;
     newWord.letters$.subscribe(() => (this.words = this.words));
+  }
+
+  reset() {
+    this.wordsSubject.next([]);
   }
 }
 

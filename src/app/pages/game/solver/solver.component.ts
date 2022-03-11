@@ -1,7 +1,7 @@
 import { Component, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { BehaviorSubject, combineLatest, Subject } from 'rxjs';
 import { distinctUntilChanged, filter, map, takeUntil } from 'rxjs/operators';
-import { Puzzle } from 'src/app/puzzle';
+import { LetterMode, Puzzle } from 'src/app/puzzle';
 
 @Component({
   selector: 'app-solver',
@@ -24,14 +24,34 @@ export class SolverComponent implements OnInit, OnDestroy {
     }
   }
 
+  hasSingleAnswer$ = this.puzzle.answers$.pipe(
+    map((answers) => answers.length === 1),
+    distinctUntilChanged()
+  );
+  hasBeenSolved$ = combineLatest([
+    this.puzzle.words$,
+    this.puzzle.answers$,
+  ]).pipe(
+    map(([words, answers]) => {
+      if (answers.length !== 1) {
+        return false;
+      }
+      const lastWord = words[words.length - 1].letters
+        ?.map((letter) => letter.letter)
+        .join('');
+      const answer = answers[0];
+      return lastWord === answer;
+    }),
+    distinctUntilChanged()
+  );
+
   constructor() {}
 
   ngOnInit(): void {
     this.startingWord$
       .pipe(takeUntil(this.destroyed))
       .subscribe((startingWord) => {
-        console.log(`Added starting word: "${startingWord}"`);
-        // this.puzzle = new Puzzle();
+        this.puzzle.reset();
         this.addWord(startingWord);
       });
   }
@@ -41,7 +61,19 @@ export class SolverComponent implements OnInit, OnDestroy {
   }
 
   addWord(word: string) {
+    const answerCount = this.puzzle.getPossibleAnswers().length;
     this.puzzle.addWord(word);
+    if (answerCount === 1) {
+      const words = this.puzzle.words;
+      if (words) {
+        const lastWord = words[words.length - 1];
+        if (lastWord) {
+          lastWord.letters?.forEach(
+            (letter) => (letter.mode = LetterMode.found)
+          );
+        }
+      }
+    }
   }
 
   @Output('reset') resetEvent = new Subject();
